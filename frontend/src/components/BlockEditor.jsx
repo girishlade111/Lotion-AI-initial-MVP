@@ -245,10 +245,18 @@ const BlockEditor = ({ blocks = [], onChange }) => {
         <BlockTypeMenu
           position={menuPosition}
           onSelect={(type) => {
-            addBlock(type);
+            if (focusedBlockId) {
+              updateBlock(focusedBlockId, { type });
+            } else {
+              addBlock(type);
+            }
             setShowTypeMenu(false);
+            setFocusedBlockId(null);
           }}
-          onClose={() => setShowTypeMenu(false)}
+          onClose={() => {
+            setShowTypeMenu(false);
+            setFocusedBlockId(null);
+          }}
         />
       )}
       
