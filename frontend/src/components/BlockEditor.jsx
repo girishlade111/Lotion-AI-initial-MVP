@@ -16,7 +16,7 @@ const BlockEditor = ({ blocks = [], onChange }) => {
     }
   }, []);
   
-  const addBlock = (type = 'text', index = blocks.length) => {
+  const addBlock = (type = 'text', index = blocks.length, focusAfter = true) => {
     const newBlock = {
       id: Date.now().toString(),
       type,
@@ -26,6 +26,16 @@ const BlockEditor = ({ blocks = [], onChange }) => {
     const newBlocks = [...blocks];
     newBlocks.splice(index + 1, 0, newBlock);
     onChange(newBlocks);
+    
+    // Focus the new block after a short delay
+    if (focusAfter) {
+      setTimeout(() => {
+        const inputs = document.querySelectorAll('input[type="text"], textarea');
+        if (inputs[index + 1]) {
+          inputs[index + 1].focus();
+        }
+      }, 50);
+    }
   };
   
   const updateBlock = (blockId, updates) => {
