@@ -239,6 +239,9 @@ const BlockEditor = ({ blocks = [], onChange }) => {
       checkbox: 'To-do',
       code: 'Code block',
       callout: 'Callout text',
+      quote: 'Quote',
+      divider: 'Divider',
+      table: 'Table cell',
     };
     return placeholders[type] || 'Type something...';
   };
