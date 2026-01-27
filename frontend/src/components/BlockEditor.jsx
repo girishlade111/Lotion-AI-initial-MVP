@@ -156,7 +156,7 @@ const BlockEditor = ({ blocks = [], onChange }) => {
     
     const blockProps = {
       value: block.content || '',
-      onChange: (e) => updateBlock(block.id, { content: e.target.value }),
+      onChange: (e) => handleContentChange(block.id, e.target.value),
       onKeyDown: (e) => handleKeyDown(e, block.id, index),
       onFocus: () => setFocusedBlockId(block.id),
       onMouseUp: (e) => handleTextSelect(e, block.id),
