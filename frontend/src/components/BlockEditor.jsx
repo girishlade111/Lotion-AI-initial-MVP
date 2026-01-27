@@ -155,7 +155,7 @@ const BlockEditor = ({ blocks = [], onChange }) => {
       case 'numberedList':
         return (
           <div className="flex gap-2">
-            <span className="text-gray-500 mt-1">{index + 1}.</span>
+            <span className="text-gray-500 mt-1 min-w-[20px]">{index + 1}.</span>
             <input {...blockProps} className={baseClasses} />
           </div>
         );
@@ -184,6 +184,43 @@ const BlockEditor = ({ blocks = [], onChange }) => {
           <div className="bg-[#1a1a1a] border border-[#2f2f2f] rounded-lg p-4 flex gap-3">
             <span className="text-2xl">💡</span>
             <input {...blockProps} className={baseClasses} />
+          </div>
+        );
+      case 'quote':
+        return (
+          <div className="border-l-4 border-gray-600 pl-4">
+            <input {...blockProps} className={`${baseClasses} italic text-gray-400`} />
+          </div>
+        );
+      case 'divider':
+        return (
+          <div className="py-4">
+            <div className="border-t border-[#2f2f2f]" />
+          </div>
+        );
+      case 'table':
+        return (
+          <div className="overflow-x-auto">
+            <table className="w-full border border-[#2f2f2f] rounded-lg overflow-hidden">
+              <tbody>
+                <tr>
+                  <td className="border border-[#2f2f2f] p-2">
+                    <input 
+                      {...blockProps} 
+                      placeholder="Cell 1"
+                      className={`${baseClasses} w-full`}
+                    />
+                  </td>
+                  <td className="border border-[#2f2f2f] p-2">
+                    <input 
+                      type="text"
+                      placeholder="Cell 2"
+                      className={`${baseClasses} w-full`}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         );
       default:
