@@ -45,6 +45,32 @@ const BlockEditor = ({ blocks = [], onChange }) => {
     onChange(newBlocks);
   };
   
+  const handleContentChange = (blockId, newContent) => {
+    // Check for markdown shortcuts
+    const shortcuts = {
+      '# ': 'heading1',
+      '## ': 'heading2',
+      '### ': 'heading3',
+      '- ': 'bulletList',
+      '* ': 'bulletList',
+      '1. ': 'numberedList',
+      '[] ': 'checkbox',
+      '[ ] ': 'checkbox',
+      '> ': 'quote',
+      '```': 'code',
+      '---': 'divider',
+    };
+    
+    for (const [shortcut, type] of Object.entries(shortcuts)) {
+      if (newContent === shortcut || (shortcut === '---' && newContent === '---')) {
+        updateBlock(blockId, { type, content: '' });
+        return;
+      }
+    }
+    
+    updateBlock(blockId, { content: newContent });
+  };
+  
   const deleteBlock = (blockId) => {
     if (blocks.length > 1) {
       onChange(blocks.filter(block => block.id !== blockId));
