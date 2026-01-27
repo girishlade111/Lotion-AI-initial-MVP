@@ -52,17 +52,61 @@ const BlockEditor = ({ blocks = [], onChange }) => {
   };
   
   const handleKeyDown = (e, blockId, index) => {
+    const block = blocks[index];
+    
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      addBlock('text', index);
+      
+      // If current block is empty and is a list/checkbox, convert to text
+      if (e.target.value === '' && ['bulletList', 'numberedList', 'checkbox'].includes(block.type)) {
+        updateBlock(blockId, { type: 'text' });
+        return;
+      }
+      
+      // Continue the same block type for lists and checkboxes
+      if (block.type === 'bulletList') {
+        addBlock('bulletList', index);
+      } else if (block.type === 'numberedList') {
+        addBlock('numberedList', index);
+      } else if (block.type === 'checkbox') {
+        addBlock('checkbox', index);
+      } else {
+        addBlock('text', index);
+      }
     } else if (e.key === 'Backspace' && e.target.value === '') {
       e.preventDefault();
-      deleteBlock(blockId);
+      
+      // If it's a list/checkbox, convert to text first before deleting
+      if (['bulletList', 'numberedList', 'checkbox'].includes(block.type)) {
+        updateBlock(blockId, { type: 'text' });
+      } else if (blocks.length > 1) {
+        deleteBlock(blockId);
+        // Focus previous block
+        setTimeout(() => {
+          const inputs = document.querySelectorAll('input[type="text"], textarea');
+          if (inputs[index - 1]) {
+            inputs[index - 1].focus();
+          }
+        }, 50);
+      }
     } else if (e.key === '/' && e.target.value === '') {
       e.preventDefault();
       const rect = e.target.getBoundingClientRect();
       setMenuPosition({ top: rect.bottom, left: rect.left });
       setShowTypeMenu(true);
+      setFocusedBlockId(blockId);
+    } else if (e.key === 'ArrowUp' && index > 0) {
+      // Move to previous block
+      const inputs = document.querySelectorAll('input[type="text"], textarea');
+      if (inputs[index - 1]) {
+        inputs[index - 1].focus();
+      }
+    } else if (e.key === 'ArrowDown' && index < blocks.length - 1) {
+      // Move to next block
+      const inputs = document.querySelectorAll('input[type="text"], textarea');
+      if (inputs[index + 1]) {
+        inputs[index + 1].focus();
+      }
     }
   };
   
